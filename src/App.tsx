@@ -59,6 +59,9 @@ export default function App() {
     case "home":
       return <HomeScreen onSelect={(tile) => send({ type: "SELECT_TILE", tile })} />;
     case "gallery":
+    case "viewer":
+      // Viewer is an overlay over the gallery (§6.2) — the gallery stays
+      // mounted underneath so its scroll position survives close.
       return (
         <>
           <GalleryScreen
@@ -66,16 +69,15 @@ export default function App() {
             onOpenPhoto={(index) => send({ type: "OPEN_PHOTO", index })}
             onBack={goHome}
           />
+          {state.screen === "viewer" && (
+            <PhotoViewer
+              photos={photos}
+              startIndex={state.viewerIndex ?? 0}
+              onClose={() => send({ type: "CLOSE_VIEWER" })}
+            />
+          )}
           <HomeButton onHome={goHome} />
         </>
-      );
-    case "viewer":
-      return (
-        <PhotoViewer
-          photos={photos}
-          startIndex={state.viewerIndex ?? 0}
-          onClose={() => send({ type: "CLOSE_VIEWER" })}
-        />
       );
     case "map":
       return (

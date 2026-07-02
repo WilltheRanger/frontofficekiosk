@@ -48,6 +48,16 @@ export function useKioskData(): KioskData & { refresh: () => void } {
   const [usingMockData, setUsingMockData] = useState(!supabase);
   const inFlight = useRef(false);
 
+  // Latest values readable inside refresh() without re-creating the callback.
+  const photosRef = useRef(photos);
+  photosRef.current = photos;
+  const announcementsRef = useRef(announcements);
+  announcementsRef.current = announcements;
+  const buildingsRef = useRef(buildings);
+  buildingsRef.current = buildings;
+  const roomsRef = useRef(rooms);
+  roomsRef.current = rooms;
+
   const refresh = useCallback(() => {
     if (!supabase || inFlight.current) return;
     inFlight.current = true;
@@ -71,36 +81,41 @@ export function useKioskData(): KioskData & { refresh: () => void } {
           .order("label"),
       ]);
 
+      // Failure posture (PLANNING §6.6): an errored request keeps whatever is
+      // currently shown — real content must never be replaced by samples
+      // because of a network blip. Samples appear only when there is nothing
+      // better: photos empty until the Drive→R2 pipeline is live, or wayfinding
+      // tables unreachable AND nothing cached.
       let anyMock = false;
 
-      // Photos: an empty table is expected until the Drive→R2 pipeline is
-      // live, so empty also falls back to samples.
-      let nextPhotos: Photo[];
-      if (!photoRes.error && photoRes.data.length > 0) {
-        nextPhotos = photoRes.data as Photo[];
+      let nextPhotos = photosRef.current;
+      if (!photoRes.error) {
+        if (photoRes.data.length > 0) {
+          nextPhotos = photoRes.data as Photo[];
+        } else {
+          nextPhotos = mockPhotos; // expected-empty until the pipeline is on
+          anyMock = true;
+        }
       } else {
-        nextPhotos = mockPhotos;
         anyMock = true;
       }
 
       // Announcements: an empty feed is a legitimate state — show it.
-      let nextAnnouncements: Announcement[];
+      let nextAnnouncements = announcementsRef.current;
       if (!annRes.error) {
         nextAnnouncements = annRes.data as Announcement[];
       } else {
-        nextAnnouncements = mockAnnouncements;
         anyMock = true;
       }
 
-      let nextBuildings: Building[];
+      let nextBuildings = buildingsRef.current;
       if (!bldgRes.error && bldgRes.data.length > 0) {
         nextBuildings = bldgRes.data as Building[];
-      } else {
-        nextBuildings = mockBuildings;
+      } else if (bldgRes.error) {
         anyMock = true;
       }
 
-      let nextRooms: Room[];
+      let nextRooms = roomsRef.current;
       if (!roomRes.error && roomRes.data.length > 0) {
         nextRooms = roomRes.data.map((r) => {
           const teacher = r.teacher as { name: string } | { name: string }[] | null;
@@ -113,8 +128,7 @@ export function useKioskData(): KioskData & { refresh: () => void } {
               : (teacher?.name ?? null),
           };
         });
-      } else {
-        nextRooms = mockRooms;
+      } else if (roomRes.error) {
         anyMock = true;
       }
 
