@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <linearGradient id="bg" gradientTransform="rotate(270 0.5 0.5)">
+      <stop offset="0%" stop-color="#46236a"/>
+      <stop offset="100%" stop-color="#2b1745"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <circle cx="1100" cy="300" r="126" fill="#d9a72e" opacity="0.85"/>
+  <path d="M0 640 Q 400 480 800 640 T 1600 600 V 1000 H 0 Z" fill="#2b1745" opacity="0.75"/>
+  <path d="M0 730 Q 500 600 1000 710 T 1600 680 V 1000 H 0 Z" fill="#46236a" opacity="0.8"/>
+  <g font-family="sans-serif" text-anchor="middle">
+    <text x="800" y="500" font-size="64" font-weight="800" fill="#ffffff" opacity="0.95" letter-spacing="6">SENIOR SUNRISE</text>
+    <text x="800" y="560" font-size="30" font-weight="600" fill="#d9a72e" letter-spacing="10">SAMPLE PHOTO</text>
+  </g>
+</svg>

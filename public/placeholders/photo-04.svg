@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <linearGradient id="bg" gradientTransform="rotate(135 0.5 0.5)">
+      <stop offset="0%" stop-color="#8a63c8"/>
+      <stop offset="100%" stop-color="#46236a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <circle cx="680" cy="220" r="144" fill="#efc75e" opacity="0.85"/>
+  <path d="M0 640 Q 400 480 800 640 T 1600 600 V 1000 H 0 Z" fill="#46236a" opacity="0.75"/>
+  <path d="M0 730 Q 500 600 1000 710 T 1600 680 V 1000 H 0 Z" fill="#8a63c8" opacity="0.8"/>
+  <g font-family="sans-serif" text-anchor="middle">
+    <text x="800" y="500" font-size="64" font-weight="800" fill="#ffffff" opacity="0.95" letter-spacing="6">MARCHING BRAHMAS</text>
+    <text x="800" y="560" font-size="30" font-weight="600" fill="#efc75e" letter-spacing="10">SAMPLE PHOTO</text>
+  </g>
+</svg>
