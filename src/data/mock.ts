@@ -17,8 +17,8 @@ const captions = [
 
 export const mockPhotos: Photo[] = captions.map((caption, i) => ({
   id: `mock-photo-${i + 1}`,
-  thumb_url: `/placeholders/photo-0${i + 1}.svg`,
-  display_url: `/placeholders/photo-0${i + 1}.svg`,
+  thumb_url: `${import.meta.env.BASE_URL}placeholders/photo-0${i + 1}.svg`,
+  display_url: `${import.meta.env.BASE_URL}placeholders/photo-0${i + 1}.svg`,
   caption,
   width: 1600,
   height: 1000,

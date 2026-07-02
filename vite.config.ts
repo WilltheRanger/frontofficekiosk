@@ -21,6 +21,9 @@ function emitVersionJson(): Plugin {
 }
 
 export default defineConfig({
+  // Relative base so the same build works at a domain root (Cloudflare Pages)
+  // or under a subpath (github.io/frontofficekiosk/).
+  base: "./",
   plugins: [react(), tailwindcss(), emitVersionJson()],
   define: {
     __BUILD_ID__: JSON.stringify(buildId),
