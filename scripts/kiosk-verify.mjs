@@ -95,6 +95,17 @@ try {
   check("room info card appears", await visible("room-info-card"));
   await page.waitForTimeout(1100); // route draw animation
   await shot("5-map-route");
+
+  // Zoom buttons must work despite the pan surface's pointer capture
+  // (regression guard — capture on an ancestor swallows button clicks).
+  const mapInner = page.locator('[data-testid="campus-map"] > div').first();
+  const zoomBefore = await mapInner.evaluate((el) => el.style.transform);
+  await page.getByLabel("Zoom in").click();
+  await page.waitForTimeout(300);
+  const zoomAfter = await mapInner.evaluate((el) => el.style.transform);
+  check("map zoom button zooms", zoomBefore !== zoomAfter);
+  await page.getByLabel("Reset view").click();
+  await page.waitForTimeout(300);
   await page.getByTestId("tab-teachers").click();
   await page.waitForTimeout(400);
   await shot("6-map-teachers");

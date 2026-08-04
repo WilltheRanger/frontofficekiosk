@@ -51,35 +51,38 @@ export function CampusMap({
   return (
     <div
       className="relative h-full w-full overflow-hidden rounded-3xl border border-[#e5e1da] bg-white"
-      style={{ touchAction: "none" }}
-      onPointerDown={(e) => {
-        drag.current = {
-          pointerId: e.pointerId,
-          startX: e.clientX,
-          startY: e.clientY,
-          panX: pan.x,
-          panY: pan.y,
-        };
-        e.currentTarget.setPointerCapture(e.pointerId);
-      }}
-      onPointerMove={(e) => {
-        if (!drag.current || drag.current.pointerId !== e.pointerId) return;
-        setPan({
-          x: clampPan(drag.current.panX + (e.clientX - drag.current.startX), scale),
-          y: clampPan(drag.current.panY + (e.clientY - drag.current.startY), scale),
-        });
-      }}
-      onPointerUp={() => (drag.current = null)}
-      onPointerCancel={() => (drag.current = null)}
       data-testid="campus-map"
     >
+      {/* Pan handlers live on the map surface, NOT the outer container:
+          pointer capture on an ancestor of the zoom buttons would retarget
+          their pointerup and swallow the click (verified empirically). */}
       <div
         className="h-full w-full"
         style={{
           transform: `translate(${pan.x}px, ${pan.y}px) scale(${scale})`,
           transformOrigin: "center center",
           transition: drag.current ? "none" : "transform 150ms ease-out",
+          touchAction: "none",
         }}
+        onPointerDown={(e) => {
+          drag.current = {
+            pointerId: e.pointerId,
+            startX: e.clientX,
+            startY: e.clientY,
+            panX: pan.x,
+            panY: pan.y,
+          };
+          e.currentTarget.setPointerCapture(e.pointerId);
+        }}
+        onPointerMove={(e) => {
+          if (!drag.current || drag.current.pointerId !== e.pointerId) return;
+          setPan({
+            x: clampPan(drag.current.panX + (e.clientX - drag.current.startX), scale),
+            y: clampPan(drag.current.panY + (e.clientY - drag.current.startY), scale),
+          });
+        }}
+        onPointerUp={() => (drag.current = null)}
+        onPointerCancel={() => (drag.current = null)}
       >
         <svg viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`} className="h-full w-full">
           {/* grounds */}
