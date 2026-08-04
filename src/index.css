@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* ── DBHS brand tokens (PLANNING §8.2) ─────────────────────────────
+   Purple aligned to #582c83 — the tint the existing dbhs-wayfinder
+   app already uses — pending official brand assets (Decision D18). */
+@theme {
+  --color-brahma-400: #8a63c8;
+  --color-brahma-600: #582c83;
+  --color-brahma-700: #46236a;
+  --color-brahma-900: #2b1745;
+  --color-gold-300: #efc75e;
+  --color-gold-500: #d9a72e;
+  --color-gold-700: #8f6e1a;
+  --color-surface: #f6f4f0;
+  --color-ink: #1d1633;
+  --color-ink-muted: #6b6478;
+
+  --font-display: "Montserrat", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+/* ── Kiosk lockdown (PLANNING §6.7) ──────────────────────────────── */
+* {
+  -webkit-user-select: none;
+  user-select: none;
+}
+html {
+  cursor: none;
+  overscroll-behavior: none;
+}
+body {
+  touch-action: manipulation;
+  font-family: var(--font-body);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  overflow: hidden;
+}
+img {
+  -webkit-user-drag: none;
+}
+
+/* Dev escape hatch: show the cursor when not in kiosk mode */
+html.dev-cursor {
+  cursor: default;
+}
+
+/* ── Motion ──────────────────────────────────────────────────────── */
+@keyframes kiosk-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes attract-slide-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes kenburns-a {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.06) translate(0.8%, -0.6%); }
+}
+@keyframes kenburns-b {
+  from { transform: scale(1.06) translate(-0.8%, 0.4%); }
+  to { transform: scale(1) translate(0, 0); }
+}
+@keyframes you-are-here {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.35); }
+}
+@keyframes route-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+.screen-enter {
+  animation: kiosk-fade-in 200ms ease-out both;
+}
+.attract-layer-in {
+  animation: attract-slide-in 1200ms ease both;
+}
+.route-path {
+  stroke-dasharray: 1;
+  animation: route-draw 800ms ease-out 150ms both;
+}
+.pressable {
+  transition: transform 80ms ease, filter 80ms ease;
+}
+.pressable:active {
+  transform: scale(0.98);
+  filter: brightness(0.94);
+}
